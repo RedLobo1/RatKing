@@ -84,11 +84,6 @@ public class SewerTeleportation : MonoBehaviour
     {
         Debug.Log("Teleporting");
 
-        if (transform.rotation.eulerAngles.y == 180)
-        {
-            offset *= -1;
-        }
-
         //if (this.transform.rotation.y == 180)
         var pos = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x,
                                              transform.position.y,
@@ -100,6 +95,11 @@ public class SewerTeleportation : MonoBehaviour
         {
             if(hit.collider == null)
             {
+                if (transform.rotation.eulerAngles.y == 180)
+                {
+                    offset *= -1;
+                }
+
                 transform.position = new Vector3(pos.x + offset.x,
                                                  transform.position.y,
                                                  pos.z + offset.z);

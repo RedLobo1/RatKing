@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class characterMovement : MonoBehaviour
@@ -49,7 +47,8 @@ public class characterMovement : MonoBehaviour
         }
     }
     public void UpdatePosition(Vector3 movementVector)
-    {;
+    {
+        ;
         if (CanIMove(movementVector))
         {
             _command = new CompositeCommand();
@@ -94,6 +93,7 @@ public class characterMovement : MonoBehaviour
         foreach (Vector3 direction in directions.Values)
         {
             //self
+            Debug.DrawRay(this.transform.position, direction, Color.red, 1);
             if (Physics.Raycast(this.transform.position, direction, out hit, 1, mask))
             {
                 var blob = hit.collider.transform.parent;
@@ -115,7 +115,7 @@ public class characterMovement : MonoBehaviour
             {
                 foreach (Transform grandChild in child) //sendRayFromGrandChilds as well
                 {
-                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask)) 
+                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask))
                     {
                         var blob = hit.collider.transform.parent;
                         if (blob != null)

@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 44372768}
   - component: {fileID: 44372767}
   - component: {fileID: 44372766}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BlobPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2799,7 +2799,7 @@ GameObject:
   - component: {fileID: 831479356}
   - component: {fileID: 831479355}
   - component: {fileID: 831479354}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BlobPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4112,6 +4112,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed449fe309fc3ea4fa7c265f8daaf187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!65 &1380579536
 BoxCollider:
   m_ObjectHideFlags: 0

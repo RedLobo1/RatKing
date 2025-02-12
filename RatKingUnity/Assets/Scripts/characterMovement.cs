@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class characterMovement : MonoBehaviour
 {
@@ -11,24 +12,35 @@ public class characterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Debug.Log("Undo");
+            CommandInvoker.Undo();
+            //UpdatePosition(new Vector3(0, 0, -1));
+        }
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            UpdatePosition(new Vector3(1, 0, 0));
+            CommandInvoker.ExecuteCommand(new MoveCommand(new Vector3(1, 0, 0), this));
+            //UpdatePosition(new Vector3(1, 0, 0));
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            UpdatePosition(new Vector3(-1, 0, 0));
+            CommandInvoker.ExecuteCommand(new MoveCommand(new Vector3(-1, 0, 0), this));
+            //UpdatePosition(new Vector3(-1, 0, 0));
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            UpdatePosition(new Vector3(0, 0, 1));
+            CommandInvoker.ExecuteCommand(new MoveCommand(new Vector3(0, 0, 1), this));
+            //UpdatePosition(new Vector3(0, 0, 1));
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            UpdatePosition(new Vector3(0, 0, -1));
+            CommandInvoker.ExecuteCommand(new MoveCommand(new Vector3(0, 0, -1), this));
+            //UpdatePosition(new Vector3(0, 0, -1));
         }
     }
-    void UpdatePosition(Vector3 movementVector)
+    public void UpdatePosition(Vector3 movementVector)
     {
         var targetGridPosition = this.transform.position + movementVector;
         if (!IsTargetWall(targetGridPosition))

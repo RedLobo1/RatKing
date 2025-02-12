@@ -14,10 +14,16 @@ public class MoveCommand : ICommand
     }
     public void Execute()
     {
-        _player.UpdatePosition(_direction);
+        Debug.Log("Move");
+        _player.transform.position = _player.transform.position + _direction;
+        
+        //_player.UpdatePosition(_direction,true);
     }
     public void Undo()
     {
-        _player.UpdatePosition(-_direction);
+        Debug.Log("UnMove");
+        _player.transform.position = _player.transform.position - _direction;
+
+        //_player.UpdatePosition(-_direction, false);
     }
 }

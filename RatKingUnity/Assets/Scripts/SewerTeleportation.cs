@@ -24,7 +24,14 @@ public class SewerTeleportation : MonoBehaviour
                 Debug.Log("Teleporting");
                 hit.collider.transform.position = new Vector3(_TargetTile.transform.position.x, hit.collider.transform.position.y, _TargetTile.transform.position.z);
                 float RotationAngle = Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward);
-                hit.collider.transform.rotation = Quaternion.Euler(0, hit.collider.transform.rotation.y+RotationAngle, 0); //Rotating the object
+                hit.collider.transform.rotation = Quaternion.Euler(0, hit.collider.transform.rotation.y + RotationAngle, 0); //Rotating the object
+
+                var blob = hit.collider.transform.parent;
+                if (blob.tag == "BlobConnected") //Removing parency if a connected block teleported
+                {
+                    blob.transform.parent = null;
+                    blob.tag = "BlobDisconnected";
+                }
             }
         }
     }

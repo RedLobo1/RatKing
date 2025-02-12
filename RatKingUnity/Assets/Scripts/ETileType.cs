@@ -1,7 +1,8 @@
 public enum ETileType
 {
     Walkable,
-    Wall
+    Wall,
+    Sewer
 }
 
 

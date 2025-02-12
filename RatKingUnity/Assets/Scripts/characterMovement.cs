@@ -44,8 +44,6 @@ public class characterMovement : MonoBehaviour
             this.transform.position = targetGridPosition;
             AttachNeighbours(movementVector);
         }
-
-
     }
 
     private void AttachNeighbours(Vector3 movementVector)
@@ -54,7 +52,7 @@ public class characterMovement : MonoBehaviour
         RaycastHit hit;
         foreach (Vector3 direction in directions.Values)
         {
-            if (Physics.Raycast(this.transform.position, direction, out hit, 2))
+            if (Physics.Raycast(this.transform.position, direction, out hit, 1))
             {
                 if (hit.collider != null)
                 {

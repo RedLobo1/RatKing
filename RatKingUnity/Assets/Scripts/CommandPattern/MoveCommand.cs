@@ -15,12 +15,20 @@ public class MoveCommand : ICommand
     public void Execute()
     {
         Debug.Log("Move");
-        _player.transform.position = _player.transform.position + _direction;
+        if (_player.CanIMove(_direction))
+        {
+            _player.transform.position = _player.transform.position + _direction;
+        }
+        else
+        {
+            _direction = Vector3.zero;
+        }
         
         //_player.UpdatePosition(_direction,true);
     }
     public void Undo()
     {
+
         Debug.Log("UnMove");
         _player.transform.position = _player.transform.position - _direction;
 

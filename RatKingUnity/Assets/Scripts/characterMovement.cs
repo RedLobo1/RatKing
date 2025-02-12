@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class characterMovement : MonoBehaviour
@@ -39,11 +40,11 @@ public class characterMovement : MonoBehaviour
     }
     void UpdatePosition(Vector3 movementVector)
     {
-        
+
         if (CanIMove(movementVector))
         {
             this.transform.position = this.transform.position + movementVector;
-            AttachNeighbours(movementVector);
+            CheckForNeighbours(movementVector);
         }
     }
 
@@ -55,9 +56,9 @@ public class characterMovement : MonoBehaviour
         //for player
         var targetGridPosition = this.transform.position + movementVector;
         bool canMove = !IsTargetWall(targetGridPosition);
-        if (!canMove) 
+        if (!canMove)
             return canMove; //return when canMove is false
-        
+
         //for grandchilds
         foreach (Transform child in this.transform)
         {
@@ -65,32 +66,52 @@ public class characterMovement : MonoBehaviour
             {
                 targetGridPosition = grandChild.transform.position + movementVector;
                 canMove = !IsTargetWall(targetGridPosition);
-                if (!canMove) 
+                if (!canMove)
                     return canMove; //return when canMove is false
             }
         }
         return canMove;
     }
 
-    private void AttachNeighbours(Vector3 movementVector)
+    private void CheckForNeighbours(Vector3 movementVector)
     {
         //this function checks if there is a neighbour in any direction and attaches the ones it found
         RaycastHit hit;
         foreach (Vector3 direction in directions.Values)
         {
+            //self
             if (Physics.Raycast(this.transform.position, direction, out hit, 1))
             {
-                if (hit.collider != null)
+                AttachNeighbours(hit);
+            }
+
+            //grandchilds
+            foreach (Transform child in this.transform)
+            {
+                foreach (Transform grandChild in child) //sendRayFromGrandChilds as well
                 {
-                    if (hit.collider.gameObject.CompareTag("Blob"))
+                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1)) 
                     {
-                        Debug.Log("Touching Blob");
-                        hit.collider.transform.parent.SetParent(this.transform);
+                        AttachNeighbours(hit);
                     }
                 }
             }
         }
 
+    }
+
+    private void AttachNeighbours(RaycastHit hit)
+    {
+        var blob = hit.collider.transform.parent;
+        if (blob != null)
+        {
+            if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
+            {
+                Debug.Log("Touching Blob");
+                blob.SetParent(this.transform); //only do this is this has not been done before
+                blob.tag = "BlobConnected";
+            }
+        }
     }
 
     bool IsTargetWall(Vector3 targetGridPosition)

@@ -13,7 +13,7 @@ public class S_SewerPortal : MonoBehaviour
         // Debug.LogError("Sewer does not check if the object colliding is the player yet");
         //check if player
 
-        if(!_skipNextTeleport)
+        if (!_skipNextTeleport)
         {
             _skipNextTeleport = true;
 
@@ -27,20 +27,20 @@ public class S_SewerPortal : MonoBehaviour
 
             float forwardDistance1 = Vector3.Distance(collision.transform.position, transform.position);
             collision.transform.position = collision.transform.position - CheckPortalDistance() + (forwardDistance1 * _linkedPortal.transform.forward) - (forwardDistance1 * transform.forward);
-            
+
             Quaternion rotationDifference = _linkedPortal.transform.rotation * Quaternion.Inverse(transform.rotation);
             collision.transform.rotation = rotationDifference * collision.transform.rotation;
 
             _linkedPortal.RecievingTeleport();
         }
-        else 
-            _skipNextTeleport=false;
+        else
+            _skipNextTeleport = false;
     }
 
     public void RecievingTeleport()
     {
         //to not teleport the player on collision in loop
-        _skipNextTeleport=true;
+        _skipNextTeleport = true;
     }
     private Vector3 CheckPortalDistance()
     {

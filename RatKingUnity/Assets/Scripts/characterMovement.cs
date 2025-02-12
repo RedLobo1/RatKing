@@ -38,7 +38,7 @@ public class characterMovement : MonoBehaviour
             UpdatePosition(directions["Down"]);
         }
     }
-    void UpdatePosition(Vector3 movementVector)
+    public void UpdatePosition(Vector3 movementVector)
     {
 
         if (CanIMove(movementVector))

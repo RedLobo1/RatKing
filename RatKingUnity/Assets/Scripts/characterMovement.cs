@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,12 +39,37 @@ public class characterMovement : MonoBehaviour
     }
     void UpdatePosition(Vector3 movementVector)
     {
-        var targetGridPosition = this.transform.position + movementVector;
-        if (!IsTargetWall(targetGridPosition))
+        
+        if (CanIMove(movementVector))
         {
-            this.transform.position = targetGridPosition;
+            this.transform.position = this.transform.position + movementVector;
             AttachNeighbours(movementVector);
         }
+    }
+
+    private bool CanIMove(Vector3 movementVector)
+    {
+        //this function checks if a movement in the chosen direction would make you overlap with the wall.
+        //and prevent you from moving if so
+
+        //for player
+        var targetGridPosition = this.transform.position + movementVector;
+        bool canMove = !IsTargetWall(targetGridPosition);
+        if (!canMove) 
+            return canMove; //return when canMove is false
+        
+        //for grandchilds
+        foreach (Transform child in this.transform)
+        {
+            foreach (Transform grandChild in child)
+            {
+                targetGridPosition = grandChild.transform.position + movementVector;
+                canMove = !IsTargetWall(targetGridPosition);
+                if (!canMove) 
+                    return canMove; //return when canMove is false
+            }
+        }
+        return canMove;
     }
 
     private void AttachNeighbours(Vector3 movementVector)

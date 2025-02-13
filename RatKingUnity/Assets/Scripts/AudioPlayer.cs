@@ -12,6 +12,21 @@ public class AudioPlayer : MonoBehaviour
 
     void Start()
     {
+        FindAllObjectsOfType();
+        
+
+        PlayAmbiance();
+        
+    }
+
+    private void Update()
+    {
+        if (character == null)
+            FindAllObjectsOfType();
+    }
+
+    private void FindAllObjectsOfType()
+    {
         character = GameObject.FindObjectOfType<characterMovement>();
         sewers = GameObject.FindObjectsOfType<SewerTeleportationReworked>();
         //lasers = GameObject.FindObjectsOfType<Laser>();
@@ -19,7 +34,6 @@ public class AudioPlayer : MonoBehaviour
         //TO DO: add door opening, button pressed, onsewerout, on sewerin, 
         //on detach,
 
-        PlayAmbiance();
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
         foreach (var sewer in sewers)

@@ -7,7 +7,7 @@ public class CharacterAnimationController : MonoBehaviour
 
     void Start()
     {
-
+        character = FindObjectOfType<characterMovement>();
         if (character != null)
         {
             character.OnMove += PlayMoveAnimation;

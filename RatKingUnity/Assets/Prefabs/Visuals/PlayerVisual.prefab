@@ -114,9 +114,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc5685ade5cca7240b2d4c4affbb6ba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailPrefabs:
+  meatBits:
   - {fileID: 6770411419270474678, guid: 339f5a845fe163d4cab977f22e9177a9, type: 3}
   - {fileID: 1007574410769912106, guid: d573b5768fee4354f8a0461e0a08c7ba, type: 3}
+  trailPrefabs:
+  - {fileID: 1007574410769912106, guid: 77fb809500c400a4a83b9a9dd4db3f9f, type: 3}
+  - {fileID: 1007574410769912106, guid: 50916da6bc63ed94698989f71fe0e729, type: 3}
+  character: {fileID: 0}
 --- !u!1001 &994055372580366039
 PrefabInstance:
   m_ObjectHideFlags: 0

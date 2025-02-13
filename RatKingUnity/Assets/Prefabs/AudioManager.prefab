@@ -206,12 +206,42 @@ MonoBehaviour:
       volume: 1
       pitch: 1
       source: {fileID: 0}
-      loop: 1
+      loop: 0
       playOnAwake: 1
       randomPitch: 1
       randomClip: 0
       canInterrupt: 1
       minRandomPitch: 0.6
       maxRandomPitch: 1.4
+      randomClips: []
+  - name: LandingSplash
+    sounds:
+    - name: LandingSplash
+      clip: {fileID: 8300000, guid: 6f1c3d6d3721969488493fdfac932f24, type: 3}
+      volume: 1
+      pitch: 1
+      source: {fileID: 0}
+      loop: 0
+      playOnAwake: 1
+      randomPitch: 1
+      randomClip: 0
+      canInterrupt: 1
+      minRandomPitch: 0.8
+      maxRandomPitch: 1.2
+      randomClips: []
+  - name: NextLevel
+    sounds:
+    - name: NextLevel
+      clip: {fileID: 8300000, guid: 874f38b6180f3fa46b56c904ad2f76b6, type: 3}
+      volume: 1
+      pitch: 1
+      source: {fileID: 0}
+      loop: 0
+      playOnAwake: 1
+      randomPitch: 1
+      randomClip: 0
+      canInterrupt: 1
+      minRandomPitch: 0.8
+      maxRandomPitch: 1.2
       randomClips: []
   mute: 0

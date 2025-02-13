@@ -17,6 +17,13 @@ public class LevelEnd : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Something's in");
+            if (GameObject.FindGameObjectsWithTag("BlobDisconnected").Length == 0)
+            {
+                Debug.Log("It's a win!");
+            }
+            else
+            {
+                Debug.Log("It's a loose");
+            }
     }
 }

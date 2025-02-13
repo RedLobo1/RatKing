@@ -26,7 +26,7 @@ public class CompositeCommand : ICommand
 
         for (int i = _childCommands.Count-1; i >= 0; i--)
         {
-            Debug.Log(i);
+            //Debug.Log(i);
             _childCommands.ElementAt(i).Undo();
         }
     }

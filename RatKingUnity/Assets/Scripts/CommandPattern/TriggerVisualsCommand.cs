@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings;
 
 public class TriggerVisualsCommand : ICommand
 {
-    public event EventHandler<PositionEventArgs> OnConnect;
     RaycastHit _hit;
     characterMovement _player;
     characterMovement _character;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelEnd : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class LevelEnd : MonoBehaviour
             if (GameObject.FindGameObjectsWithTag("BlobDisconnected").Length == 0)
             {
                 Debug.Log("It's a win!");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             }
             else
             {

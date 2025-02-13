@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level0.unity
+    guid: 22328779afdc49e44b01d127ae72f314
+  - enabled: 1
     path: Assets/Scenes/Finished Folders/Level1.unity
     guid: 83d8e75b13bf38940a623e20adfde992
   - enabled: 1
@@ -18,15 +21,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Finished Folders/Level4.unity
     guid: 048e1a6b5eba655499c7b66e63a692a9
   - enabled: 1
-    path: Assets/Scenes/Finished Folders/Level5.unity
+    path: Assets/Scenes/Finished Folders/Level6.unity
     guid: 26031547e0195484898fb2039319b1a6
   - enabled: 1
     path: Assets/Scenes/Finished Folders/Level6.unity
-    guid: 9fbb42fd3c1f7c54db2911f1fb42f12d
+    guid: 26031547e0195484898fb2039319b1a6
   - enabled: 1
     path: Assets/Scenes/Finished Folders/Level7.unity
-    guid: 57b771bc856d93942a7fde2ee260dc5f
+    guid: 34cb384f40e908441858a57a10b05fcb
   - enabled: 1
-    path: Assets/Scenes/Finished Folders/Level8.unity
+    path: Assets/Scenes/Finished Folders/Level7.unity
     guid: 34cb384f40e908441858a57a10b05fcb
   m_configObjects: {}

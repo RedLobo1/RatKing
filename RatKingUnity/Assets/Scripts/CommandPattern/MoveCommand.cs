@@ -14,7 +14,7 @@ public class MoveCommand : ICommand
     }
     public void Execute()
     {
-        Debug.Log("Move");
+        //Debug.Log("Move");
         if (_player.CanIMove(_direction))
         {
             _player.transform.position = _player.transform.position + _direction;

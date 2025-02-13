@@ -169,4 +169,34 @@ MonoBehaviour:
       minRandomPitch: 0.8
       maxRandomPitch: 1.2
       randomClips: []
+  - name: LaserFiring
+    sounds:
+    - name: LaserFiring
+      clip: {fileID: 8300000, guid: 745b64b772c234c4cb28b81e4623e9e7, type: 3}
+      volume: 1
+      pitch: 1
+      source: {fileID: 0}
+      loop: 0
+      playOnAwake: 0
+      randomPitch: 1
+      randomClip: 0
+      canInterrupt: 1
+      minRandomPitch: 0.8
+      maxRandomPitch: 1.2
+      randomClips: []
+  - name: Ambiance
+    sounds:
+    - name: Ambiance
+      clip: {fileID: 8300000, guid: 5337e785bbb53284b9fdadcbae90d4f7, type: 3}
+      volume: 1
+      pitch: 1
+      source: {fileID: 0}
+      loop: 1
+      playOnAwake: 1
+      randomPitch: 0
+      randomClip: 0
+      canInterrupt: 0
+      minRandomPitch: 0.8
+      maxRandomPitch: 1.2
+      randomClips: []
   mute: 0

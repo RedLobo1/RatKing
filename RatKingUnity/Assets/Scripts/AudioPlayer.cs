@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,18 @@ public class AudioPlayer : MonoBehaviour
 {
     private characterMovement character;
     private SewerTeleportationReworked[] sewers;
+    //private Laser[] lasers;
 
     void Start()
     {
         character = GameObject.FindObjectOfType<characterMovement>();
         sewers = GameObject.FindObjectsOfType<SewerTeleportationReworked>();
+        //lasers = GameObject.FindObjectsOfType<Laser>();
 
         //TO DO: add door opening, button pressed, onsewerout, on sewerin, 
         //on detach,
-        
 
+        PlayAmbiance();
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
         foreach (var sewer in sewers)
@@ -25,14 +28,21 @@ public class AudioPlayer : MonoBehaviour
             sewer.OnSewerExit += PlayOnSewerOut;
         }
     }
+
+    private void PlayAmbiance()
+    {
+        AudioManager.Instance.Play("Ambiance");
+    }
+
     private void PlayOnConnect(object sender, PositionEventArgs e)
     {
         AudioManager.Instance.Play("PlayerConnect");
     }
     private void PlayOnMove(object sender, GrandChildrenEventArgs e)
     {
-        var a = e.GrandChildren.Count;
-        AudioManager.Instance.Play("Move");
+        float a = 0;
+        //a = e.GrandChildren.Count;
+        AudioManager.Instance.Play("Move", a);
         Debug.Log("step");
     }
     private void PlayOnSewerIn(object sender, PositionEventArgs e)
@@ -42,6 +52,11 @@ public class AudioPlayer : MonoBehaviour
     private void PlayOnSewerOut()
     {
         AudioManager.Instance.Play("SewerOut");
+    }
+
+    private void PlayOnLaserFiring()
+    {
+        AudioManager.Instance.Play("LaserFiring");
     }
     private void PlayOnButtonPressed()
     {

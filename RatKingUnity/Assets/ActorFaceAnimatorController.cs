@@ -19,15 +19,27 @@ public class ActorFaceAnimatorController : MonoBehaviour
     {
         if (faceAnimator != null)
         {
-            faceAnimator.Play("isMoving");
+            //faceAnimator.Play("isMoving");
         }
     }
     private void PlayConnectAnimation(object sender, PositionEventArgs e)
     {
         if (faceAnimator != null)
         {
-            faceAnimator.Play("isConnected");
+            GameObject currentConnectedGameObject = e.Entity; // Get the connected entity (blob)
 
+            if (currentConnectedGameObject != null)
+            {
+                foreach (Transform child in currentConnectedGameObject.transform) // Iterate through its children
+                {
+                    Transform grandChild = child.GetChild(0);
+                    if (grandChild.gameObject == this.gameObject) // Check if this script's GameObject is a child
+                    {
+                        faceAnimator.Play("isConnected");
+                        return; // Exit after finding a match
+                    }
+                }
+            }
         }
     }
 }

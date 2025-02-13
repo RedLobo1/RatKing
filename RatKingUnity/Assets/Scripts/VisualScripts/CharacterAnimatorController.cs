@@ -19,7 +19,7 @@ public class CharacterAnimationController : MonoBehaviour
         if (animator != null)
         {
             animator.Play("isMoving");
-            //Debug.Log("Moved");
+
         }
     }
     void OnDestroy()

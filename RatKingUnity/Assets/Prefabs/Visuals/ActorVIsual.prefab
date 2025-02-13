@@ -74,8 +74,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7463053412225768249}
   - component: {fileID: 5250317629932971759}
-  - component: {fileID: 5710896438527891829}
+  - component: {fileID: 1113151371913844037}
   - component: {fileID: 4177803670041182741}
+  - component: {fileID: 5710896438527891829}
   m_Layer: 0
   m_Name: ActorVIsual
   m_TagString: Untagged
@@ -114,7 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faceAnimator: {fileID: 329564965811960065}
   character: {fileID: 0}
---- !u!114 &5710896438527891829
+--- !u!114 &1113151371913844037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5721811323007188306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 405a0a0a2c92d38488268f99eea0fa8e, type: 3}
+  m_Script: {fileID: 11500000, guid: f89bcf1d562b7c84c87b859104fa83aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 4161897918107077839}
@@ -146,6 +147,20 @@ MonoBehaviour:
   trailPrefabs:
   - {fileID: 1007574410769912106, guid: 77fb809500c400a4a83b9a9dd4db3f9f, type: 3}
   - {fileID: 1007574410769912106, guid: 50916da6bc63ed94698989f71fe0e729, type: 3}
+  character: {fileID: 0}
+--- !u!114 &5710896438527891829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5721811323007188306}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 405a0a0a2c92d38488268f99eea0fa8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4161897918107077839}
   character: {fileID: 0}
 --- !u!1001 &6026568526373973310
 PrefabInstance:

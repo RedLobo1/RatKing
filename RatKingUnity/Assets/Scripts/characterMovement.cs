@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class characterMovement : MonoBehaviour
 {
@@ -110,7 +109,7 @@ public class characterMovement : MonoBehaviour
                 {
                     if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                     {
-                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
+                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f, hit.collider.transform.parent.gameObject); //average position is the connection point
                         TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
                         CommandInvoker.ExecuteCommand(command);
                     }
@@ -130,7 +129,7 @@ public class characterMovement : MonoBehaviour
                         {
                             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                             {
-                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f); //average position is the connection point
+                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f, hit.collider.transform.parent.gameObject); //average position is the connection point
                                 TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
                                 CommandInvoker.ExecuteCommand(command);
                             }

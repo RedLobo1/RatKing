@@ -6,7 +6,7 @@ public class characterMovement : MonoBehaviour
 {
     private Animator animator;
 
-    public event Action OnMove;
+    public event EventHandler<GrandChildrenEventArgs> OnMove;
     public event EventHandler<PositionEventArgs> OnConnect;
 
     public CompositeCommand _command;
@@ -57,7 +57,7 @@ public class characterMovement : MonoBehaviour
     {
         if (CanIMove(movementVector))
         {
-            OnMove?.Invoke();
+            OnMove?.Invoke(this, GetAllGrandChildren());
             _command = new CompositeCommand();
 
             CheckForNeighbours(movementVector);
@@ -69,6 +69,21 @@ public class characterMovement : MonoBehaviour
             CheckForVisuals(movementVector);
 
         }
+    }
+
+    private GrandChildrenEventArgs GetAllGrandChildren()
+    {
+        List<GameObject> Grandchildren = new List<GameObject>();
+
+        foreach (Transform child in this.transform)
+        {
+            foreach (Transform grandChild in child)
+            {
+                Grandchildren.Add(grandChild.gameObject);
+            }
+        }
+        //Debug.Log(Grandchildren.Count);
+        return new GrandChildrenEventArgs(Grandchildren);
     }
 
     public bool CanIMove(Vector3 movementVector)

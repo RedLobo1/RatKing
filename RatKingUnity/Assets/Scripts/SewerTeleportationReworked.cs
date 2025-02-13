@@ -90,7 +90,7 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     public IEnumerator Teleport(Transform EntityTransform)
     {
-        Debug.Log("Teleporting" + index++);
+        //Debug.Log("Teleporting" + index++);
         var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 

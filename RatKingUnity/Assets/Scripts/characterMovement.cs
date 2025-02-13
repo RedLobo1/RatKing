@@ -52,7 +52,6 @@ public class characterMovement : MonoBehaviour
     }
     public void UpdatePosition(Vector3 movementVector)
     {
-
         if (CanIMove(movementVector))
         {
             OnMove?.Invoke();
@@ -62,11 +61,10 @@ public class characterMovement : MonoBehaviour
             _command.AddToList(new MoveCommand(movementVector, this));
 
             CommandInvoker.ExecuteCommand(_command);
-
         }
     }
 
-    private bool CanIMove(Vector3 movementVector)
+    public bool CanIMove(Vector3 movementVector)
     {
         //this function checks if a movement in the chosen direction would make you overlap with the wall.
         //and prevent you from moving if so

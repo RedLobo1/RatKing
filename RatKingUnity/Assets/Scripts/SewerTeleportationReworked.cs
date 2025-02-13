@@ -69,7 +69,11 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     private Transform ResetRotation(Transform transform)
     {
-        //GetTopLevelObjectTransform(transform).rotation = Quaternion.identity;
+        if (transform.parent != null)
+        {
+            if (transform.parent.rotation.eulerAngles.y % 180 == 0)
+                transform.parent.rotation = Quaternion.identity;
+        }
         return transform;
     }
 
@@ -149,11 +153,12 @@ public class SewerTeleportationReworked : MonoBehaviour
             float RotationAngle = Mathf.Round(Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward));
             if (RotationAngle == 180)
                 offset *= -1;
-            if (RotationAngle == 90)
+            if (RotationAngle%180 == 90)
                 if (this.transform.forward.x > _connectedSewer.transform.forward.x)
                     offset = Vector3.zero;
                 else
-                    offset = Quaternion.Euler(0, 90,0) * offset;
+                    offset = Vector3.zero;
+                    //offset = Quaternion.Euler(0, 90,0) * offset;
 
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object

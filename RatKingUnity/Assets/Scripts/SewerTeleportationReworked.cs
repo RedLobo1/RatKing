@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SewerTeleportationReworked : MonoBehaviour
@@ -59,12 +61,43 @@ public class SewerTeleportationReworked : MonoBehaviour
                     if (mask)
                     {
                         DisconnectSingleBlob(hit.collider.transform.parent); //disconnect this from parent
-                        StartCoroutine(Teleport(hit.collider.transform)); //this is base object. we must know the base in order to calculate the offset
+                        if (CheckAllignmentWithSewer(hit.collider.transform))
+                            StartCoroutine(Teleport(hit.collider.transform)); //this is base object. we must know the base in order to calculate the offset
                     }
                 }
             }
         }
 
+    }
+
+    private bool CheckAllignmentWithSewer(Transform childTele)
+    {
+        foreach (Transform child in childTele.parent)
+        {
+            if (child != childTele)
+            {
+                RaycastHit hit;
+                //var BackwardVector = new Vector3(-this.transform.forward.x, this.transform.forward.y, -this.transform.forward.z);
+                // Debug.DrawRay(child.position, BackwardVector, Color.red, 10);
+
+                if (Physics.Raycast(child.position, transform.forward, out hit, 2))
+                {
+                    if (hit.collider != null)
+                    {
+                        var tileType = hit.collider.gameObject.GetComponent<TileProperties>();
+                        if (tileType != null)
+                        {
+                            if (tileType.TileType == ETileType.Wall)
+                            {
+                                Debug.Log("False");
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private void DisconnectAllChildren(Transform player)

@@ -147,7 +147,7 @@ public class SewerTeleportationReworked : MonoBehaviour
                 if (this.transform.forward.x > _connectedSewer.transform.forward.x)
                     offset = Vector3.zero;
                 else
-                    offset = Quaternion.Euler(0, 90, 0) * offset;
+                    offset = Quaternion.Euler(0, 90 - Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y),0) * offset;
 
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object

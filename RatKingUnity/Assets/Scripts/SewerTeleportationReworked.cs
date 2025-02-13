@@ -77,7 +77,11 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     private void DisconnectSingleBlob(Transform blob)
     {
-        blob.SetParent(null);
+        if (blob.tag == "BlobConnected") //Removing parency if a connected block teleported
+        {
+            blob.parent = null;
+            blob.tag = "BlobDisconnected";
+        }
     }
 
     //private void Teleport(Transform EntityTransform)
@@ -100,21 +104,18 @@ public class SewerTeleportationReworked : MonoBehaviour
         var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 
-        EntityTransform.TryGetComponent<Renderer>(out Renderer renderer);
-        renderer.enabled = false;
+        //MakeInvisible(EntityTransform);
+        //PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
+        //OnDisconnect?.Invoke(this, pos);
 
-        MakeInvisible(EntityTransform);
-        PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
-        OnDisconnect?.Invoke(this, pos);
-
-        yield return new WaitForSeconds(_teleportDuration);
+        //yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }
-        MakeVisible(EntityTransform);
-        OnSewerExit?.Invoke();
+        //MakeVisible(EntityTransform);
+        //OnSewerExit?.Invoke();
         yield return new WaitForSeconds(0.1f);
         _isTeleporting = false;
     }

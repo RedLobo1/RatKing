@@ -30,12 +30,14 @@ public class AudioPlayer : MonoBehaviour
         sewers = GameObject.FindObjectsOfType<SewerTeleportationReworked>();
         //lasers = GameObject.FindObjectsOfType<Laser>();
 
-        //TO DO: add events
 
+        //TO DO: add events
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
+        //character.OnLand += PlayOnPlayerLanding;
         //character.OnReverse += PlayOnReverse;
         //character.OnDoorOpening += PlayOnDoorOpening;
+
         foreach (var sewer in sewers)
         {
             sewer.OnDisconnect += PlayOnSewerIn;

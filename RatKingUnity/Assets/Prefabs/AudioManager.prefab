@@ -217,7 +217,7 @@ MonoBehaviour:
   - name: LandingSplash
     sounds:
     - name: LandingSplash
-      clip: {fileID: 8300000, guid: 6f1c3d6d3721969488493fdfac932f24, type: 3}
+      clip: {fileID: 8300000, guid: bc5a9e72e2da2ee4c84dfe400fe550b8, type: 3}
       volume: 1
       pitch: 1
       source: {fileID: 0}

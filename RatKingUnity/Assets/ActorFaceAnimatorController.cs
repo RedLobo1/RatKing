@@ -19,7 +19,15 @@ public class ActorFaceAnimatorController : MonoBehaviour
     {
         if (faceAnimator != null)
         {
-            //faceAnimator.Play("isMoving");
+
+                Transform parentTransform = transform.parent;
+                Transform grandParent = parentTransform.parent;
+
+                if (grandParent.tag == "BlobConnected")
+                {
+                faceAnimator.Play("isMoving");
+                }
+
         }
     }
     private void PlayConnectAnimation(object sender, PositionEventArgs e)

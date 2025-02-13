@@ -8,6 +8,7 @@ public class characterMovement : MonoBehaviour
     private Animator animator;
 
     public event EventHandler<GrandChildrenEventArgs> OnMove;
+    public event Action OnMoveReverse;
     public event EventHandler<PositionEventArgs> OnConnect;
 
     public CompositeCommand _command;
@@ -32,6 +33,7 @@ public class characterMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             CommandInvoker.Undo();
+            OnMoveReverse?.Invoke();
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))

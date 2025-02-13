@@ -13,6 +13,9 @@ public class AudioPlayer : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false; // Hide the cursor
+        Cursor.lockState = CursorLockMode.Locked;
+
         FindAllObjectsOfType();
         PlayAmbiance();
 
@@ -67,6 +70,8 @@ public class AudioPlayer : MonoBehaviour
     private void PlayAmbiance()
     {
         AudioManager.Instance.Play("Ambiance");
+        AudioManager.Instance.Play("Music");
+
     }
     private void PlayOnConnect(object sender, PositionEventArgs e)
     {

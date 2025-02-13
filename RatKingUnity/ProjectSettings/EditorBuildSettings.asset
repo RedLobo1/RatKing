@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Finished Folders/Level7.unity
     guid: 57b771bc856d93942a7fde2ee260dc5f
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/LevelEnd.unity
+    guid: 663e13454f1afd34ea6909ffbae5135b
   m_configObjects: {}

@@ -7,7 +7,7 @@ public class characterMovement : MonoBehaviour
 {
     private Animator animator;
 
-    //public event EventHandler<GrandChildrenEventArgs> OnMove;
+    public event EventHandler<GrandChildrenEventArgs> OnMove;
     public event EventHandler<PositionEventArgs> OnConnect;
 
     public CompositeCommand _command;

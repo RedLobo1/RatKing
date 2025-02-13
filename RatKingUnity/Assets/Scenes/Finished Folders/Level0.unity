@@ -1685,6 +1685,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCube (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 245788484275251190, guid: 028a3506fb3208846b2b8ef134cc4f20, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 1780139007103786610, guid: 028a3506fb3208846b2b8ef134cc4f20, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5330534
@@ -30164,7 +30168,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 6
-  m_Depth: -1
+  m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295

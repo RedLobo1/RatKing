@@ -1,0 +1,147 @@
+using System;
+using System.Collections;
+using UnityEngine;
+
+public class SewerTeleportationReworked : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject _connectedSewer;
+
+    [SerializeField]
+    private byte _SewerSize = 1;
+
+    private Vector3 _teleportingPosition;
+    private int _teleportingRotation;
+
+    private bool isTeleporting = false;
+
+    private int index = 0;
+    // Start is called before the first frame update
+    void Start()
+    {
+        _teleportingPosition = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x,
+                                      0,
+                                      _connectedSewer.transform.position.z - _connectedSewer.transform.forward.z); //Calculating teleporting position
+
+        _teleportingRotation = (int)Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Debug.DrawRay(this.transform.position, Vector3.up, Color.red, 3);
+        RaycastHit hit;
+        var position = new Vector3(this.transform.position.x, this.transform.position.y - 0.2f, this.transform.position.z); //ray starting point lowered to hit the object on top of me
+        if (Physics.Raycast(position, Vector3.up, out hit, 1))
+        {
+            if (hit.collider != null && !isTeleporting)
+            {
+                isTeleporting = true;
+                if (hit.collider.gameObject.tag == "Player")
+                {
+                    DisconnectAllChildren(hit.collider.transform); //disconnect this from parent
+                    StartCoroutine(Teleport(hit.collider.transform));
+                }
+                //assumption it's a blob
+                else
+                {
+                    var mask = false;
+                    if (this.transform.rotation.eulerAngles.y % 180 == 0)//sewer is rotated 180 degrees
+                        mask = GetColliderSize(hit.collider.transform.parent).x <= _SewerSize; //check x size
+                    else if (this.transform.rotation.eulerAngles.y % 180 == 90) //sewer is rotated 90 degrees
+                        mask = GetColliderSize(hit.collider.transform.parent).z <= _SewerSize; //check z size
+                    if (mask)
+                    {
+                        DisconnectSingleBlob(hit.collider.transform.parent); //disconnect this from parent
+                        StartCoroutine(Teleport(hit.collider.transform)); //this is base object. we must know the base in order to calculate the offset
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void DisconnectAllChildren(Transform player)
+    {
+        foreach (Transform blob in player)
+        {
+            DisconnectSingleBlob(blob);
+        }
+    }
+
+    private void DisconnectSingleBlob(Transform blob)
+    {
+        blob.SetParent(null);
+    }
+
+    //private void Teleport(Transform EntityTransform)
+    //{
+        
+    //    Debug.Log("Teleporting" + index++);
+    //    var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
+    //    EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
+
+    //    if (!IsTeleporterBlocked())
+    //    {
+    //        EntityTransform.position = _teleportingPosition + offset;
+    //        EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
+    //    }
+    //}
+
+    public IEnumerator Teleport(Transform EntityTransform)
+    {
+        //Debug.Log("Teleporting" + index++);
+        var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
+        EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
+
+        if (!IsTeleporterBlocked())
+        {
+            EntityTransform.position = _teleportingPosition + offset;
+            EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
+        }
+        yield return new WaitForSeconds(0.1f);
+        isTeleporting = false;
+    }
+    Transform GetTopLevelObjectTransform(Transform obj)
+    {
+        return obj.parent != null ? obj.parent : obj; //This will get the parent if the objct has one, otherwise it returns itself
+    }
+    Vector3 GetOffsetFromParent(Transform obj)
+    {
+        return obj.parent != null ? obj.localPosition : Vector3.zero; //This will get the localPosition if the objct has a parent, otherwise it returns xero vector
+    }
+
+    private bool IsTeleporterBlocked()
+    {
+        RaycastHit hit;
+        if (!Physics.Raycast(new Vector3(_teleportingPosition.x, _teleportingPosition.y - 1f, _teleportingPosition.z), Vector3.up, out hit, 2)) //only move when no object in the way
+        {
+            if (hit.collider != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        return false;
+
+    }
+    private Vector3 GetOffsetToParent()
+    {
+        throw new NotImplementedException();
+    }
+
+    private Vector3Int GetColliderSize(Transform blob)
+    {
+        Bounds totalBounds = new Bounds(blob.GetChild(0).position, Vector3.zero);
+        foreach (Transform child in blob)
+        {
+            Collider childCollider = child.GetComponent<Collider>();
+            if (childCollider != null)
+            {
+                totalBounds.Encapsulate(childCollider.bounds);
+            }
+        }
+        return Vector3Int.RoundToInt(totalBounds.size);
+        // Output the total size of the parent (based on the children's colliders)
+    }
+}

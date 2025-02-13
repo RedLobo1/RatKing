@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SewerTeleportation : MonoBehaviour
 {
@@ -25,6 +27,7 @@ public class SewerTeleportation : MonoBehaviour
                 if (hit.collider.transform.parent == null) //player has no parent to for now this is the player
                 {
                     Teleport(hit.collider.transform, Vector3.zero);
+                    DetachAllChildren(hit.collider.transform);
                 }
                 else //this is a blob
                 {
@@ -56,6 +59,15 @@ public class SewerTeleportation : MonoBehaviour
         }
     }
 
+    private void DetachAllChildren(Transform playerTransform)
+    {
+        foreach (Transform child in playerTransform)
+        {
+            child.SetParent(null);
+            DisconnectBlob(child);
+        }
+    }
+
     private Vector3Int GetColliderSize(Transform blob)
     {
         Bounds totalBounds = new Bounds(blob.GetChild(0).position, Vector3.zero);
@@ -80,32 +92,32 @@ public class SewerTeleportation : MonoBehaviour
         }
     }
 
-    private void Teleport(Transform transform, Vector3 offset)
+    private void Teleport(Transform blobTransform, Vector3 offset)
     {
         Debug.Log("Teleporting");
 
         //if (this.transform.rotation.y == 180)
         var pos = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x,
-                                             transform.position.y,
+                                             blobTransform.position.y,
                                              _connectedSewer.transform.position.z - _connectedSewer.transform.forward.z);
 
         RaycastHit hit;
         //Debug.DrawRay(new Vector3(0, -1f, 0), Vector3.up, Color.red, 10);
         if (!Physics.Raycast(new Vector3(pos.x, pos.y - 1f, pos.z), Vector3.up, out hit, 2)) //only move when no object in the way
         {
-            if(hit.collider == null)
+            if (hit.collider == null)
             {
-                if (transform.rotation.eulerAngles.y == 180)
+                if (blobTransform.rotation.eulerAngles.y == 180)
                 {
                     offset *= -1;
                 }
 
-                transform.position = new Vector3(pos.x + offset.x,
-                                                 transform.position.y,
+                blobTransform.position = new Vector3(pos.x + offset.x,
+                                                 blobTransform.position.y,
                                                  pos.z + offset.z);
 
                 float RotationAngle = Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward);
-                transform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(transform.rotation.eulerAngles.y + RotationAngle), 0); //Rotating the object
+                blobTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(blobTransform.rotation.eulerAngles.y + RotationAngle), 0); //Rotating the object
             }
 
         }

@@ -14,12 +14,12 @@ public class SoundManager : MonoBehaviour
 
     private void PlayOnConnect(object sender, PositionEventArgs e)
     {
-        Debug.Log("Connection Sound");
+        //Debug.Log("Connection Sound");
     }
 
-    private void PlayOnMove()
+    private void PlayOnMove(object sender, GrandChildrenEventArgs e)
     {
-        Debug.Log("Moving Sound");
+        //Debug.Log("Moving Sound");
     }
 
     // Update is called once per frame

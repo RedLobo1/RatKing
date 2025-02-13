@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TrailSpawner : MonoBehaviour
@@ -20,11 +18,11 @@ public class TrailSpawner : MonoBehaviour
         lastPosition = transform.position; // Set initial position
     }
 
-    private void SpawnTrail()
+    private void SpawnTrail(object sender, GrandChildrenEventArgs e)
     {
         if (meatBits.Length == 0) return; // Ensure array is not empty
 
-        Debug.Log("spawn");
+        //Debug.Log("spawn");
         // Choose a random prefab from the array
 
         GameObject trailPrefab = trailPrefabs[Random.Range(0, meatBits.Length)];
@@ -32,8 +30,8 @@ public class TrailSpawner : MonoBehaviour
         float rotation = Random.Range(0f, 360f);
 
 
-        Instantiate(meatPrefab, transform.position,Quaternion.Euler(0, rotation,0));
-        Instantiate(trailPrefab, transform.position,Quaternion.identity);
+        Instantiate(meatPrefab, transform.position, Quaternion.Euler(0, rotation, 0));
+        Instantiate(trailPrefab, transform.position, Quaternion.identity);
 
         // Update last position
         lastPosition = transform.position;

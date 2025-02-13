@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ActorFaceAnimatorController : MonoBehaviour
@@ -17,7 +15,7 @@ public class ActorFaceAnimatorController : MonoBehaviour
             character.OnMove += PlayMoveAnimation;
         }
     }
-    private void PlayMoveAnimation()
+    private void PlayMoveAnimation(object sender, GrandChildrenEventArgs e)
     {
         if (faceAnimator != null)
         {

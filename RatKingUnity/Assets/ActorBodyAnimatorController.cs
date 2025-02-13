@@ -28,21 +28,18 @@ public class ActorBodyAnimatorController : MonoBehaviour
     private void PlayActorMoveAnimation(object sender, GrandChildrenEventArgs e)
     {
         
-        if (e.GrandChildren == null) return; 
-
-        if (e.GrandChildren.Contains(gameObject))
-        {
-            MoveActor();
-        }
-    }
-
-    private void MoveActor()
-    {
         if (animator != null)
         {
-            animator.Play("isMoving");
+            Transform parentTransform = transform.parent;
+            Transform grandParent = parentTransform.parent;
+
+            if (grandParent.tag == "BlobConnected")
+            {
+                animator.Play("isMoving");
+            }
         }
     }
+
 
     void OnDestroy()
     {

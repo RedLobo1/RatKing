@@ -28,30 +28,31 @@ public class characterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             CommandInvoker.Undo();
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             UpdatePosition(Vector3.right);
-
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             UpdatePosition(directions["Left"]);
-
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
             UpdatePosition(directions["Up"]);
-
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
             UpdatePosition(directions["Down"]);
-
         }
+
     }
     public void UpdatePosition(Vector3 movementVector)
     {

@@ -70,8 +70,8 @@ MonoBehaviour:
       randomPitch: 1
       randomClip: 1
       canInterrupt: 1
-      minRandomPitch: 0.8
-      maxRandomPitch: 1.2
+      minRandomPitch: 0.7
+      maxRandomPitch: 1.3
       randomClips:
       - {fileID: 8300000, guid: 5bf33f4936c8813478a711d5c09433f0, type: 3}
       - {fileID: 8300000, guid: d998fd199236f4842b1964f379264d2f, type: 3}
@@ -198,5 +198,20 @@ MonoBehaviour:
       canInterrupt: 0
       minRandomPitch: 0.8
       maxRandomPitch: 1.2
+      randomClips: []
+  - name: ReverseMove
+    sounds:
+    - name: ReverseMove
+      clip: {fileID: 8300000, guid: 846b89f9b65f123468f84260084e16e7, type: 3}
+      volume: 1
+      pitch: 1
+      source: {fileID: 0}
+      loop: 1
+      playOnAwake: 1
+      randomPitch: 1
+      randomClip: 0
+      canInterrupt: 1
+      minRandomPitch: 0.6
+      maxRandomPitch: 1.4
       randomClips: []
   mute: 0

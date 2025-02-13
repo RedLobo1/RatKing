@@ -29,7 +29,7 @@ public class TriggerVisualsCommand : ICommand
     }
     public void Undo()
     {
-        _player.CallVisualEvent(_pos);
+        _player.CallDisconnectEvent(_pos);
         CommandInvoker.Undo();
     }
 }

@@ -144,6 +144,10 @@ public class SewerTeleportationReworked : MonoBehaviour
         //yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
+
+            TeleportationCommand command = new TeleportationCommand(EntityTransform.transform.position, EntityTransform,EntityTransform.rotation);
+            CommandInvoker.ExecuteCommand(command);
+
             if (EntityTransform.rotation.eulerAngles.y == 180)
                 offset *= -1;
 
@@ -153,6 +157,7 @@ public class SewerTeleportationReworked : MonoBehaviour
         //MakeVisible(EntityTransform);
         //OnSewerExit?.Invoke();
         yield return new WaitForSeconds(0.1f);
+
         _isTeleporting = false;
     }
 

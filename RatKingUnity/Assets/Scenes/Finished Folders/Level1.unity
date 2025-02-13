@@ -7537,6 +7537,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShadowLarge
       objectReference: {fileID: 0}
+    - target: {fileID: 1007574410769912106, guid: 64950fc7459963b4baac1439188dc1b4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3870817982273619744, guid: 64950fc7459963b4baac1439188dc1b4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.1252799

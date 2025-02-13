@@ -13,9 +13,6 @@ public class AudioManager : MonoBehaviour
     public SoundCollection[] soundCollection;
     public bool mute = false;
 
-    
-    
-
     private void Awake()
     {
         if (Instance != null)

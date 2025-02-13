@@ -6,6 +6,8 @@ TagManager:
   tags:
   - BlobConnected
   - BlobDisconnected
+  - Lock
+  - Button
   layers:
   - Default
   - TransparentFX

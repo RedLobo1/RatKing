@@ -9,6 +9,7 @@ TagManager:
   - Lock
   - Button
   - SceneManager
+  - Hinge
   layers:
   - Default
   - TransparentFX

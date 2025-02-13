@@ -5,6 +5,8 @@ using static UnityEditor.PlayerSettings;
 
 public class characterMovement : MonoBehaviour
 {
+    private Animator animator;
+
     public event Action OnMove;
     public event EventHandler<PositionEventArgs> OnConnect;
 
@@ -20,8 +22,9 @@ public class characterMovement : MonoBehaviour
         };
     void Start()
     {
-
     }
+
+
 
     // Update is called once per frame
     void Update()

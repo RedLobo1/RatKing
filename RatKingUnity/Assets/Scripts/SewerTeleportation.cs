@@ -84,24 +84,31 @@ public class SewerTeleportation : MonoBehaviour
     {
         Debug.Log("Teleporting");
 
-        if (transform.rotation.eulerAngles.y == 180)
-        {
-            offset *= -1;
-        }
-
         //if (this.transform.rotation.y == 180)
-        transform.position = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x + offset.x,
+        var pos = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x,
                                              transform.position.y,
-                                             _connectedSewer.transform.position.z - _connectedSewer.transform.forward.z + offset.z);
+                                             _connectedSewer.transform.position.z - _connectedSewer.transform.forward.z);
 
-        //else
+        RaycastHit hit;
+        //Debug.DrawRay(new Vector3(0, -1f, 0), Vector3.up, Color.red, 10);
+        if (!Physics.Raycast(new Vector3(pos.x, pos.y - 1f, pos.z), Vector3.up, out hit, 2)) //only move when no object in the way
+        {
+            if(hit.collider == null)
+            {
+                if (transform.rotation.eulerAngles.y == 180)
+                {
+                    offset *= -1;
+                }
 
-        //transform.position = new Vector3(_connectedSewer.transform.position.x - _connectedSewer.transform.forward.x,
-        //                             transform.position.y,
-        //                             _connectedSewer.transform.position.z - _connectedSewer.transform.forward.z);
+                transform.position = new Vector3(pos.x + offset.x,
+                                                 transform.position.y,
+                                                 pos.z + offset.z);
 
-        float RotationAngle = Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward);
-        transform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(transform.rotation.eulerAngles.y + RotationAngle), 0); //Rotating the object
+                float RotationAngle = Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward);
+                transform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(transform.rotation.eulerAngles.y + RotationAngle), 0); //Rotating the object
+            }
+
+        }
 
 
     }

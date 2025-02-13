@@ -113,7 +113,7 @@ public class SewerTeleportationReworked : MonoBehaviour
         {
             if (EntityTransform.rotation.eulerAngles.y == 180)
                 offset *= -1;
-            
+
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }
@@ -147,7 +147,7 @@ public class SewerTeleportationReworked : MonoBehaviour
     private bool IsTeleporterBlocked()
     {
         RaycastHit hit;
-        if (!Physics.Raycast(new Vector3(_teleportingPosition.x, _teleportingPosition.y - 1f, _teleportingPosition.z), Vector3.up, out hit, 2)) //only move when no object in the way
+        if (Physics.Raycast(new Vector3(_teleportingPosition.x, _teleportingPosition.y - 1f, _teleportingPosition.z), Vector3.up, out hit, 2)) //only move when no object in the way
         {
             if (hit.collider != null)
             {

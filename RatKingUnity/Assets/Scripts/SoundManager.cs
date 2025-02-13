@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
         character = GameObject.FindObjectOfType<characterMovement>();
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
+
     }
 
     private void PlayOnConnect(object sender, PositionEventArgs e)

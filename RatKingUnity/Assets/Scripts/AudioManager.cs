@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting.ReorderableList;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,6 +12,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
     public SoundCollection[] soundCollection;
     public bool mute = false;
+
+    
+    
+
     private void Awake()
     {
         if (Instance != null)
@@ -36,12 +42,9 @@ public class AudioManager : MonoBehaviour
     {
         foreach (SoundCollection collection in soundCollection)
         {
-            
-
             Sound s = Array.Find(collection.sounds, sound => sound.name == name);
             if (s != null)
             {
-               
                 if (!s.canInterrupt) { if (s.source.isPlaying) return; }
                 if (s.randomPitch)
                 {
@@ -65,8 +68,10 @@ public class AudioManager : MonoBehaviour
     }
 
     [Serializable]
-    public struct SoundCollection{
+    public struct SoundCollection
+    {
         public string name;
         public Sound[] sounds;
     }
+    
 }

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class SewerTeleportationReworked : MonoBehaviour
 {
+
+    public event EventHandler<PositionEventArgs> OnDisconnect;
+    public event Action OnSewerExit;
+
+
     [SerializeField]
     private GameObject _connectedSewer;
 
@@ -13,8 +18,9 @@ public class SewerTeleportationReworked : MonoBehaviour
     private Vector3 _teleportingPosition;
     private int _teleportingRotation;
 
-    private bool isTeleporting = false;
+    private bool _isTeleporting = false;
 
+    private float _teleportDuration = 1.0f;
     private int index = 0;
     // Start is called before the first frame update
     void Start()
@@ -34,9 +40,9 @@ public class SewerTeleportationReworked : MonoBehaviour
         var position = new Vector3(this.transform.position.x, this.transform.position.y - 0.2f, this.transform.position.z); //ray starting point lowered to hit the object on top of me
         if (Physics.Raycast(position, Vector3.up, out hit, 1))
         {
-            if (hit.collider != null && !isTeleporting)
+            if (hit.collider != null && !_isTeleporting)
             {
-                isTeleporting = true;
+                _isTeleporting = true;
                 if (hit.collider.gameObject.tag == "Player")
                 {
                     DisconnectAllChildren(hit.collider.transform); //disconnect this from parent
@@ -76,7 +82,7 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     //private void Teleport(Transform EntityTransform)
     //{
-        
+
     //    Debug.Log("Teleporting" + index++);
     //    var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
     //    EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
@@ -94,14 +100,37 @@ public class SewerTeleportationReworked : MonoBehaviour
         var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 
+        EntityTransform.TryGetComponent<Renderer>(out Renderer renderer);
+        renderer.enabled = false;
+
+        MakeInvisible(EntityTransform);
+        PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
+        OnDisconnect?.Invoke(this, pos);
+
+        yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }
+        MakeVisible(EntityTransform);
+        OnSewerExit?.Invoke();
         yield return new WaitForSeconds(0.1f);
-        isTeleporting = false;
+        _isTeleporting = false;
     }
+
+    private void MakeVisible(Transform entityTransform)
+    {
+        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
+        renderer.enabled = true;
+    }
+
+    private void MakeInvisible(Transform entityTransform)
+    {
+        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
+        renderer.enabled = false;
+    }
+
     Transform GetTopLevelObjectTransform(Transform obj)
     {
         return obj.parent != null ? obj.parent : obj; //This will get the parent if the objct has one, otherwise it returns itself

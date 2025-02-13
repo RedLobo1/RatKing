@@ -24,6 +24,13 @@ public class AudioManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        AudioManager[] instances = FindObjectsOfType<AudioManager>();
+        if (instances.Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
         DontDestroyOnLoad(gameObject);
 
         foreach (SoundCollection collection in soundCollection)

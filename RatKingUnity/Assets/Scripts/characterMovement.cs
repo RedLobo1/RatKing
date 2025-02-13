@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class characterMovement : MonoBehaviour
 {
+    private Animator animator;
+
     public event Action OnMove;
     public event EventHandler<PositionEventArgs> OnConnect;
 
@@ -19,8 +22,9 @@ public class characterMovement : MonoBehaviour
         };
     void Start()
     {
-
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -52,21 +56,23 @@ public class characterMovement : MonoBehaviour
     }
     public void UpdatePosition(Vector3 movementVector)
     {
-
         if (CanIMove(movementVector))
         {
             OnMove?.Invoke();
             _command = new CompositeCommand();
 
             CheckForNeighbours(movementVector);
+
             _command.AddToList(new MoveCommand(movementVector, this));
 
             CommandInvoker.ExecuteCommand(_command);
 
+            CheckForVisuals(movementVector);
+
         }
     }
 
-    private bool CanIMove(Vector3 movementVector)
+    public bool CanIMove(Vector3 movementVector)
     {
         //this function checks if a movement in the chosen direction would make you overlap with the wall.
         //and prevent you from moving if so
@@ -90,8 +96,7 @@ public class characterMovement : MonoBehaviour
         }
         return canMove;
     }
-
-    private void CheckForNeighbours(Vector3 movementVector)
+    private void CheckForVisuals(Vector3 movementVector)
     {
         //this function checks if there is a neighbour in any direction and attaches the ones it found
         RaycastHit hit;
@@ -105,12 +110,9 @@ public class characterMovement : MonoBehaviour
                 {
                     if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                     {
-                        //Debug.Log("Blob touched");
-                        _command.AddToList(new AttachCommand(this, hit));
                         PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
-                        OnConnect?.Invoke(this, pos);
-                        //Debug.Log("Touch added");
-                        //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
+                        TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
+                        CommandInvoker.ExecuteCommand(command);
                     }
                 }
                 //AttachNeighbours(hit);
@@ -128,11 +130,58 @@ public class characterMovement : MonoBehaviour
                         {
                             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                             {
-                                //Debug.Log("Blob touched");
+                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f); //average position is the connection point
+                                TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
+                                CommandInvoker.ExecuteCommand(command);
+                            }
+                        }
+                        //AttachNeighbours(hit);
+                    }
+                }
+            }
+        }
+        //CommandInvoker.ExecuteCommand(_command);
+    }
+
+    public void CallVisualEvent(PositionEventArgs pos)
+    {
+        OnConnect?.Invoke(this, pos);
+    }
+
+    private void CheckForNeighbours(Vector3 movementVector)
+    {
+        //this function checks if there is a neighbour in any direction and attaches the ones it found
+        RaycastHit hit;
+        foreach (Vector3 direction in directions.Values)
+        {
+            //self
+            if (Physics.Raycast(this.transform.position, direction, out hit, 1, mask))
+            {
+                var blob = hit.collider.transform.parent;
+                if (blob != null)
+                {
+                    if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
+                    {
+                        //Debug.Log("Blob touched");
+                        _command.AddToList(new AttachCommand(this, hit));
+                    }
+                }
+                //AttachNeighbours(hit);
+            }
+
+            //grandchilds
+            foreach (Transform child in this.transform)
+            {
+                foreach (Transform grandChild in child) //sendRayFromGrandChilds as well
+                {
+                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask))
+                    {
+                        var blob = hit.collider.transform.parent;
+                        if (blob != null)
+                        {
+                            if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
+                            {
                                 _command.AddToList(new AttachCommand(this, hit));
-                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position+ grandChild.transform.position) / 2f); //average position is the connection point
-                                OnConnect?.Invoke(this, pos);
-                                //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
                             }
                         }
                         //AttachNeighbours(hit);

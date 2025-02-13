@@ -17,14 +17,14 @@ public class AttachCommand : ICommand
     {
         var blob = _hit.collider.transform.parent;
 
-            Debug.Log("Connect Blob");
+            //Debug.Log("Connect Blob");
             blob.SetParent(_player.transform); //only do this is this has not been done before
             blob.tag = "BlobConnected";
     }
     public void Undo()
     {
             var blob = _hit.collider.transform.parent;
-            Debug.Log("Blob Disconnect");
+            //Debug.Log("Blob Disconnect");
             blob.SetParent(null);
             blob.tag = "BlobDisconnected";
     }

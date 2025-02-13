@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class characterMovement : MonoBehaviour
 {
+    public event Action OnMove;
+    public event EventHandler<PositionEventArgs> OnConnect;
+
     public CompositeCommand _command;
     public LayerMask mask;
     // Start is called before the first frame update
@@ -49,9 +51,11 @@ public class characterMovement : MonoBehaviour
         }
     }
     public void UpdatePosition(Vector3 movementVector)
-    {;
+    {
+
         if (CanIMove(movementVector))
         {
+            OnMove?.Invoke();
             _command = new CompositeCommand();
 
             CheckForNeighbours(movementVector);
@@ -103,7 +107,9 @@ public class characterMovement : MonoBehaviour
                     {
                         //Debug.Log("Blob touched");
                         _command.AddToList(new AttachCommand(this, hit));
-                        Debug.Log("Touch added");
+                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
+                        OnConnect?.Invoke(this, pos);
+                        //Debug.Log("Touch added");
                         //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
                     }
                 }
@@ -115,7 +121,7 @@ public class characterMovement : MonoBehaviour
             {
                 foreach (Transform grandChild in child) //sendRayFromGrandChilds as well
                 {
-                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask)) 
+                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask))
                     {
                         var blob = hit.collider.transform.parent;
                         if (blob != null)
@@ -124,6 +130,8 @@ public class characterMovement : MonoBehaviour
                             {
                                 //Debug.Log("Blob touched");
                                 _command.AddToList(new AttachCommand(this, hit));
+                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position+ grandChild.transform.position) / 2f); //average position is the connection point
+                                OnConnect?.Invoke(this, pos);
                                 //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
                             }
                         }
@@ -142,7 +150,7 @@ public class characterMovement : MonoBehaviour
         {
             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
             {
-                Debug.Log("Touching Blob");
+                //Debug.Log("Touching Blob");
                 blob.SetParent(this.transform); //only do this is this has not been done before
                 blob.tag = "BlobConnected";
             }
@@ -160,7 +168,7 @@ public class characterMovement : MonoBehaviour
                 var tileType = hit.collider.GetComponent<TileProperties>();
                 if (tileType.TileType == ETileType.Wall)
                 {
-                    Debug.Log("Cannot move to wall");
+                    //Debug.Log("Cannot move to wall");
                     return true;
                 }
             }

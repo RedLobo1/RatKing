@@ -16,13 +16,13 @@ public class CompositeCommand : ICommand
         foreach (var command in _childCommands)
         {
             command.Execute();
-            Debug.Log(command.ToString()); 
+            //Debug.Log(command.ToString()); 
         }
         //Execute all child commands
     }
     public void Undo()
     {
-        Debug.Log("CompositeBack");
+        //Debug.Log("CompositeBack");
 
         for (int i = _childCommands.Count-1; i >= 0; i--)
         {

@@ -13,18 +13,14 @@ public class AudioPlayer : MonoBehaviour
     void Start()
     {
         FindAllObjectsOfType();
-        
-
         PlayAmbiance();
-        
-    }
 
+    }
     private void Update()
     {
         if (character == null)
             FindAllObjectsOfType();
     }
-
     private void FindAllObjectsOfType()
     {
         character = GameObject.FindObjectOfType<characterMovement>();
@@ -34,20 +30,25 @@ public class AudioPlayer : MonoBehaviour
         //TO DO: add door opening, button pressed, onsewerout, on sewerin, 
         //on detach,
 
+
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
+        //character.OnReverse += PlayOnReverse;
+        //character.OnDoorOpening += PlayOnDoorOpening;
         foreach (var sewer in sewers)
         {
             sewer.OnDisconnect += PlayOnSewerIn;
             sewer.OnSewerExit += PlayOnSewerOut;
         }
     }
-
+    private void PlayOnReverse()
+    {
+        AudioManager.Instance.Play("ReverseMove");
+    }
     private void PlayAmbiance()
     {
         AudioManager.Instance.Play("Ambiance");
     }
-
     private void PlayOnConnect(object sender, PositionEventArgs e)
     {
         AudioManager.Instance.Play("PlayerConnect");
@@ -67,7 +68,6 @@ public class AudioPlayer : MonoBehaviour
     {
         AudioManager.Instance.Play("SewerOut");
     }
-
     private void PlayOnLaserFiring()
     {
         AudioManager.Instance.Play("LaserFiring");

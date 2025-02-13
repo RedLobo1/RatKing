@@ -45,7 +45,7 @@ public class SewerTeleportationReworked : MonoBehaviour
                 if (hit.collider.gameObject.tag == "Player")
                 {
                     DisconnectAllChildren(hit.collider.transform); //disconnect this from parent
-                    StartCoroutine(Teleport(hit.collider.transform));
+                    StartCoroutine(Teleport(ResetRotation(hit.collider.transform)));
                 }
                 //assumption it's a blob
                 else
@@ -59,12 +59,18 @@ public class SewerTeleportationReworked : MonoBehaviour
                     {
                         DisconnectSingleBlob(hit.collider.transform.parent); //disconnect this from parent
                         if (CheckAllignmentWithSewer(hit.collider.transform))
-                            StartCoroutine(Teleport(hit.collider.transform)); //this is base object. we must know the base in order to calculate the offset
+                            StartCoroutine(Teleport(ResetRotation(hit.collider.transform))); //this is base object. we must know the base in order to calculate the offset
                     }
                 }
             }
         }
 
+    }
+
+    private Transform ResetRotation(Transform transform)
+    {
+        //GetTopLevelObjectTransform(transform).rotation = Quaternion.identity;
+        return transform;
     }
 
     private bool CheckAllignmentWithSewer(Transform childTele)
@@ -147,7 +153,7 @@ public class SewerTeleportationReworked : MonoBehaviour
                 if (this.transform.forward.x > _connectedSewer.transform.forward.x)
                     offset = Vector3.zero;
                 else
-                    offset = Quaternion.Euler(0, 90 - Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y),0) * offset;
+                    offset = Quaternion.Euler(0, 90,0) * offset;
 
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object

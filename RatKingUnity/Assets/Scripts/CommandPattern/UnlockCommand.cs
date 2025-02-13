@@ -10,18 +10,21 @@ public class UnlockCommand : ICommand
 {
     public void Execute()
     {
-        for (int i = 0; i < GameObject.FindGameObjectsWithTag("Lock").Length; i++)
+        GameObject[] lockArray = GameObject.FindGameObjectsWithTag("Lock");
+        for (int i = 0; i < lockArray.Length; i++)
         {
-            GameObject.FindGameObjectsWithTag("Lock")[i].GetComponent<BoxCollider>().enabled = false;
-            GameObject.FindGameObjectsWithTag("Lock")[i].GetComponentInChildren<SpriteRenderer>().enabled = false;
+            lockArray[i].GetComponent<BoxCollider>().enabled = false;
+            lockArray[i].GetComponentInChildren<SpriteRenderer>().enabled = false;
+            Debug.Log(i);
         }
     }
     public void Undo()
     {
+        GameObject[] lockArray = GameObject.FindGameObjectsWithTag("Lock");
         for (int i = 0; i < GameObject.FindGameObjectsWithTag("Lock").Length; i++)
         {
-            GameObject.FindGameObjectsWithTag("Lock")[i].GetComponent<BoxCollider>().enabled = true;
-            GameObject.FindGameObjectsWithTag("Lock")[i].GetComponentInChildren<SpriteRenderer>().enabled=true;
+            lockArray[i].GetComponent<BoxCollider>().enabled = true;
+            lockArray[i].GetComponentInChildren<SpriteRenderer>().enabled=true;
         }
         CommandInvoker.Undo();
     }

@@ -8,6 +8,7 @@ public class AudioPlayer : MonoBehaviour
 {
     private characterMovement character;
     private SewerTeleportationReworked[] sewers;
+    private Button[] buttons;
     //private Laser[] lasers;
 
     void Start()
@@ -28,20 +29,26 @@ public class AudioPlayer : MonoBehaviour
     {
         character = GameObject.FindObjectOfType<characterMovement>();
         sewers = GameObject.FindObjectsOfType<SewerTeleportationReworked>();
+        buttons = GameObject.FindObjectsOfType<Button>();
         //lasers = GameObject.FindObjectsOfType<Laser>();
 
 
         //TO DO: add events
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
-        //character.OnLand += PlayOnPlayerLanding;
-        //character.OnReverse += PlayOnReverse;
-        //character.OnDoorOpening += PlayOnDoorOpening;
+
+        //character.on += PlayOnPlayerLanding;
+        character.OnMoveReverse += PlayOnReverse;
 
         foreach (var sewer in sewers)
         {
             sewer.OnDisconnect += PlayOnSewerIn;
             sewer.OnSewerExit += PlayOnSewerOut;
+        }
+        foreach (var button in buttons)
+        {
+            button.OnButtonPressed += PlayOnButtonPressed;
+            button.OnDoorUnlock += PlayOnDoorOpening;
         }
     }
 

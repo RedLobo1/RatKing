@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class characterMovement : MonoBehaviour
 {
+    public event Action OnMove;
+    public event EventHandler<PositionEventArgs> OnConnect;
+
+    public CompositeCommand _command;
+    public LayerMask mask;
     // Start is called before the first frame update
     Dictionary<string, Vector3> directions = new Dictionary<string, Vector3>
         {
@@ -21,21 +25,29 @@ public class characterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            CommandInvoker.Undo();
+        }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            UpdatePosition(directions["Right"]);
+            UpdatePosition(Vector3.right);
+
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             UpdatePosition(directions["Left"]);
+
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             UpdatePosition(directions["Up"]);
+
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             UpdatePosition(directions["Down"]);
+
         }
     }
     public void UpdatePosition(Vector3 movementVector)
@@ -43,8 +55,14 @@ public class characterMovement : MonoBehaviour
 
         if (CanIMove(movementVector))
         {
-            this.transform.position = this.transform.position + movementVector;
+            OnMove?.Invoke();
+            _command = new CompositeCommand();
+
             CheckForNeighbours(movementVector);
+            _command.AddToList(new MoveCommand(movementVector, this));
+
+            CommandInvoker.ExecuteCommand(_command);
+
         }
     }
 
@@ -80,9 +98,22 @@ public class characterMovement : MonoBehaviour
         foreach (Vector3 direction in directions.Values)
         {
             //self
-            if (Physics.Raycast(this.transform.position, direction, out hit, 1))
+            if (Physics.Raycast(this.transform.position, direction, out hit, 1, mask))
             {
-                AttachNeighbours(hit);
+                var blob = hit.collider.transform.parent;
+                if (blob != null)
+                {
+                    if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
+                    {
+                        //Debug.Log("Blob touched");
+                        _command.AddToList(new AttachCommand(this, hit));
+                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
+                        OnConnect?.Invoke(this, pos);
+                        //Debug.Log("Touch added");
+                        //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
+                    }
+                }
+                //AttachNeighbours(hit);
             }
 
             //grandchilds
@@ -90,14 +121,26 @@ public class characterMovement : MonoBehaviour
             {
                 foreach (Transform grandChild in child) //sendRayFromGrandChilds as well
                 {
-                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1)) 
+                    if (Physics.Raycast(grandChild.transform.position, direction, out hit, 1, mask))
                     {
-                        AttachNeighbours(hit);
+                        var blob = hit.collider.transform.parent;
+                        if (blob != null)
+                        {
+                            if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
+                            {
+                                //Debug.Log("Blob touched");
+                                _command.AddToList(new AttachCommand(this, hit));
+                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position+ grandChild.transform.position) / 2f); //average position is the connection point
+                                OnConnect?.Invoke(this, pos);
+                                //CommandInvoker.ExecuteCommand(new AttachCommand(this, hit));
+                            }
+                        }
+                        //AttachNeighbours(hit);
                     }
                 }
             }
         }
-
+        //CommandInvoker.ExecuteCommand(_command);
     }
 
     private void AttachNeighbours(RaycastHit hit)
@@ -107,7 +150,7 @@ public class characterMovement : MonoBehaviour
         {
             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
             {
-                Debug.Log("Touching Blob");
+                //Debug.Log("Touching Blob");
                 blob.SetParent(this.transform); //only do this is this has not been done before
                 blob.tag = "BlobConnected";
             }
@@ -125,7 +168,7 @@ public class characterMovement : MonoBehaviour
                 var tileType = hit.collider.GetComponent<TileProperties>();
                 if (tileType.TileType == ETileType.Wall)
                 {
-                    Debug.Log("Cannot move to wall");
+                    //Debug.Log("Cannot move to wall");
                     return true;
                 }
             }

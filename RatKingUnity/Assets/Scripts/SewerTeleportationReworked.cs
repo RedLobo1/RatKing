@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SewerTeleportationReworked : MonoBehaviour
@@ -23,6 +21,7 @@ public class SewerTeleportationReworked : MonoBehaviour
     private bool _isTeleporting = false;
 
     private float _teleportDuration = 1.0f;
+    private float _scaleFactor = 150f;
     private int index = 0;
     // Start is called before the first frame update
     void Start()
@@ -138,10 +137,11 @@ public class SewerTeleportationReworked : MonoBehaviour
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 
         //MakeInvisible(EntityTransform);
-        //PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
-        //OnDisconnect?.Invoke(this, pos);
+        StartCoroutine(ScaleDown(EntityTransform));
+        PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
+        OnDisconnect?.Invoke(this, pos);
 
-        //yield return new WaitForSeconds(_teleportDuration);
+        yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
             if (EntityTransform.rotation.eulerAngles.y == 180)
@@ -151,22 +151,61 @@ public class SewerTeleportationReworked : MonoBehaviour
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }
         //MakeVisible(EntityTransform);
-        //OnSewerExit?.Invoke();
+        StartCoroutine(ScaleUp(EntityTransform));
+        OnSewerExit?.Invoke();
         yield return new WaitForSeconds(0.1f);
         _isTeleporting = false;
     }
 
-    private void MakeVisible(Transform entityTransform)
+    public IEnumerator ScaleUp(Transform entityTransform)
     {
-        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
-        renderer.enabled = true;
+        while (entityTransform.localScale.x <= 1f)
+        {
+            entityTransform.localScale /= _scaleFactor * Time.deltaTime;
+            yield return null;
+        }
+        entityTransform.localScale = Vector3.one;
     }
 
-    private void MakeInvisible(Transform entityTransform)
+    public IEnumerator ScaleDown(Transform entityTransform)
     {
-        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
-        renderer.enabled = false;
+        while (entityTransform.localScale.x >= 0.1f)
+        {
+            entityTransform.localScale *= _scaleFactor * Time.deltaTime;
+            yield return null;
+        }
+        entityTransform.localScale = Vector3.one / 10;
     }
+
+    //private void MakeVisible(Transform entityTransform)
+    //{
+    //    Renderer renderer;
+    //    if (entityTransform.TryGetComponent<Renderer>(out renderer))
+    //        renderer.enabled = true;
+    //    else
+    //    {
+    //        foreach(Transform Child in entityTransform)
+    //        {
+    //            if (entityTransform.TryGetComponent<Renderer>(out renderer))
+    //                renderer.enabled = true;
+    //        }
+    //    }
+    //}
+
+    //private void MakeInvisible(Transform entityTransform)
+    //{
+    //    Renderer renderer;
+    //    if (entityTransform.TryGetComponent<Renderer>(out renderer))
+    //        renderer.enabled = false;
+    //    else
+    //    {
+    //        foreach (Transform Child in entityTransform)
+    //        {
+    //            if (entityTransform.gameObject.TryGetComponent<Renderer>(out renderer)) //something is not working right)
+    //                renderer.enabled = false;
+    //        }
+    //    }
+    //}
 
     Transform GetTopLevelObjectTransform(Transform obj)
     {

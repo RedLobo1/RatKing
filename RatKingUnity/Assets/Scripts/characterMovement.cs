@@ -10,6 +10,7 @@ public class characterMovement : MonoBehaviour
     public event EventHandler<GrandChildrenEventArgs> OnMove;
     public event Action OnMoveReverse;
     public event EventHandler<PositionEventArgs> OnConnect;
+    public event EventHandler<PositionEventArgs> OnDisconnect;
 
     public CompositeCommand _command;
     public LayerMask mask;
@@ -164,6 +165,10 @@ public class characterMovement : MonoBehaviour
     public void CallVisualEvent(PositionEventArgs pos)
     {
         OnConnect?.Invoke(this, pos);
+    }
+    public void CallUndoVisualEvent(PositionEventArgs pos)
+    {
+        OnDisconnect?.Invoke(this, pos);
     }
 
     private void CheckForNeighbours(Vector3 movementVector)

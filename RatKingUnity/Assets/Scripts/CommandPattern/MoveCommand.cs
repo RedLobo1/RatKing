@@ -28,8 +28,6 @@ public class MoveCommand : ICommand
     }
     public void Undo()
     {
-
-        Debug.Log("UnMove");
         _player.transform.position = _player.transform.position - _direction;
 
         //_player.UpdatePosition(-_direction, false);

@@ -19,7 +19,10 @@ public class AudioPlayer : MonoBehaviour
     private void Update()
     {
         if (character == null)
+        {
             FindAllObjectsOfType();
+            PlayOnNextLevel();
+        }
     }
     private void FindAllObjectsOfType()
     {
@@ -27,9 +30,7 @@ public class AudioPlayer : MonoBehaviour
         sewers = GameObject.FindObjectsOfType<SewerTeleportationReworked>();
         //lasers = GameObject.FindObjectsOfType<Laser>();
 
-        //TO DO: add door opening, button pressed, onsewerout, on sewerin, 
-        //on detach,
-
+        //TO DO: add events
 
         character.OnMove += PlayOnMove;
         character.OnConnect += PlayOnConnect;
@@ -40,6 +41,15 @@ public class AudioPlayer : MonoBehaviour
             sewer.OnDisconnect += PlayOnSewerIn;
             sewer.OnSewerExit += PlayOnSewerOut;
         }
+    }
+
+    private void PlayOnPlayerLanding()
+    {
+        AudioManager.Instance.Play("LandingSplash");
+    }
+    private void PlayOnNextLevel()
+    {
+        AudioManager.Instance.Play("NextLevel");
     }
     private void PlayOnReverse()
     {

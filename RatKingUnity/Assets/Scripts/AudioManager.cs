@@ -58,6 +58,27 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+
+    public void Play(string name, float deltaPitch)
+    {
+        foreach (SoundCollection collection in soundCollection)
+        {
+            Sound s = Array.Find(collection.sounds, sound => sound.name == name);
+            if (s != null)
+            {
+                if (!s.canInterrupt) { if (s.source.isPlaying) return; }
+                if (s.randomPitch)
+                {
+                    s.source.pitch = Random.Range(s.minRandomPitch + deltaPitch, s.maxRandomPitch + deltaPitch);
+                }
+                if (s.randomClip)
+                {
+                    s.source.clip = s.randomClips[Random.Range(0, s.randomClips.Count)];
+                }
+                s.source.Play();
+            }
+        }
+    }
     public void Stop(string name)
     {
         foreach (SoundCollection collection in soundCollection)

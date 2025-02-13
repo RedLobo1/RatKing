@@ -6,6 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test scenes/Meatball test.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/Finished Folders/Level1.unity
+    guid: 83d8e75b13bf38940a623e20adfde992
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level2.unity
+    guid: 6b51cd7c3ee1b524ca8a458ff2c8af26
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level3.unity
+    guid: fc3f6efedeb747c41b48d87c248bc08b
+  - enabled: 0
+    path: Assets/Scenes/Finished Folders/Level4.unity
+    guid: 9fbb42fd3c1f7c54db2911f1fb42f12d
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level4 2.unity
+    guid: 6e674c694b0ec6f4bb7031a57314cf5f
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level5.unity
+    guid: 57b771bc856d93942a7fde2ee260dc5f
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level6.unity
+    guid: 26031547e0195484898fb2039319b1a6
+  - enabled: 1
+    path: Assets/Scenes/Finished Folders/Level7.unity
+    guid: 34cb384f40e908441858a57a10b05fcb
   m_configObjects: {}

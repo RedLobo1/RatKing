@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class characterMovement : MonoBehaviour
 {
     private Animator animator;

@@ -21,23 +21,22 @@ public class Button : MonoBehaviour
         isOn = true;
         for (int i = 0; i < GameObject.FindGameObjectsWithTag("Button").Length; i++)
         {
-            if (GameObject.FindGameObjectsWithTag("Button")[0].GetComponent<Button>().isOn)
+            if (GameObject.FindGameObjectsWithTag("Button")[i].GetComponent<Button>().isOn)
             {
+                Debug.Log("Continue");
                 continue;
             }
             else
             {
-                return;
+                Debug.Log("Return");
+                return; 
             }
         }
-        for (int i = 0; i < GameObject.FindGameObjectsWithTag("Lock").Length; i++)
-        {
-            Destroy(GameObject.FindGameObjectsWithTag("Lock")[i]);
-        }
+        UnlockCommand command = new UnlockCommand();
+        CommandInvoker.ExecuteCommand(command);
     }
     private void OnTriggerExit(Collider other)
     {
         isOn = false;
-
     }
 }

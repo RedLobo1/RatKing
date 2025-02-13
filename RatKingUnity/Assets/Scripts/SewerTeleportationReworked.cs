@@ -21,8 +21,6 @@ public class SewerTeleportationReworked : MonoBehaviour
     private bool _isTeleporting = false;
 
     private float _teleportDuration = 1.0f;
-    private float _scaleFactor = 150f;
-    private int index = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +45,7 @@ public class SewerTeleportationReworked : MonoBehaviour
                 if (hit.collider.gameObject.tag == "Player")
                 {
                     DisconnectAllChildren(hit.collider.transform); //disconnect this from parent
-                    StartCoroutine(Teleport(hit.collider.transform));
+                    StartCoroutine(Teleport(ResetRotation(hit.collider.transform)));
                 }
                 //assumption it's a blob
                 else
@@ -61,12 +59,18 @@ public class SewerTeleportationReworked : MonoBehaviour
                     {
                         DisconnectSingleBlob(hit.collider.transform.parent); //disconnect this from parent
                         if (CheckAllignmentWithSewer(hit.collider.transform))
-                            StartCoroutine(Teleport(hit.collider.transform)); //this is base object. we must know the base in order to calculate the offset
+                            StartCoroutine(Teleport(ResetRotation(hit.collider.transform))); //this is base object. we must know the base in order to calculate the offset
                     }
                 }
             }
         }
 
+    }
+
+    private Transform ResetRotation(Transform transform)
+    {
+        //GetTopLevelObjectTransform(transform).rotation = Quaternion.identity;
+        return transform;
     }
 
     private bool CheckAllignmentWithSewer(Transform childTele)
@@ -132,80 +136,45 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     public IEnumerator Teleport(Transform EntityTransform)
     {
-        //Debug.Log("Teleporting" + index++);
         var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 
         //MakeInvisible(EntityTransform);
-        StartCoroutine(ScaleDown(EntityTransform));
-        PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
-        OnDisconnect?.Invoke(this, pos);
+        //PositionEventArgs pos = new PositionEventArgs(Vector3.zero, EntityTransform.gameObject);
+        //OnDisconnect?.Invoke(this, pos);
 
-        yield return new WaitForSeconds(_teleportDuration);
+        //yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
-            if (EntityTransform.rotation.eulerAngles.y == 180)
+            float RotationAngle = Mathf.Round(Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward));
+            if (RotationAngle == 180)
                 offset *= -1;
+            if (RotationAngle == 90)
+                if (this.transform.forward.x > _connectedSewer.transform.forward.x)
+                    offset = Vector3.zero;
+                else
+                    offset = Quaternion.Euler(0, 90,0) * offset;
 
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }
         //MakeVisible(EntityTransform);
-        StartCoroutine(ScaleUp(EntityTransform));
-        OnSewerExit?.Invoke();
+        //OnSewerExit?.Invoke();
         yield return new WaitForSeconds(0.1f);
         _isTeleporting = false;
     }
 
-    public IEnumerator ScaleUp(Transform entityTransform)
+    private void MakeVisible(Transform entityTransform)
     {
-        while (entityTransform.localScale.x <= 1f)
-        {
-            entityTransform.localScale /= _scaleFactor * Time.deltaTime;
-            yield return null;
-        }
-        entityTransform.localScale = Vector3.one;
+        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
+        renderer.enabled = true;
     }
 
-    public IEnumerator ScaleDown(Transform entityTransform)
+    private void MakeInvisible(Transform entityTransform)
     {
-        while (entityTransform.localScale.x >= 0.1f)
-        {
-            entityTransform.localScale *= _scaleFactor * Time.deltaTime;
-            yield return null;
-        }
-        entityTransform.localScale = Vector3.one / 10;
+        entityTransform.TryGetComponent<Renderer>(out Renderer renderer);
+        renderer.enabled = false;
     }
-
-    //private void MakeVisible(Transform entityTransform)
-    //{
-    //    Renderer renderer;
-    //    if (entityTransform.TryGetComponent<Renderer>(out renderer))
-    //        renderer.enabled = true;
-    //    else
-    //    {
-    //        foreach(Transform Child in entityTransform)
-    //        {
-    //            if (entityTransform.TryGetComponent<Renderer>(out renderer))
-    //                renderer.enabled = true;
-    //        }
-    //    }
-    //}
-
-    //private void MakeInvisible(Transform entityTransform)
-    //{
-    //    Renderer renderer;
-    //    if (entityTransform.TryGetComponent<Renderer>(out renderer))
-    //        renderer.enabled = false;
-    //    else
-    //    {
-    //        foreach (Transform Child in entityTransform)
-    //        {
-    //            if (entityTransform.gameObject.TryGetComponent<Renderer>(out renderer)) //something is not working right)
-    //                renderer.enabled = false;
-    //        }
-    //    }
-    //}
 
     Transform GetTopLevelObjectTransform(Transform obj)
     {

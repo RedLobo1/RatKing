@@ -6,10 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Finished Folders/Level0.unity
-    guid: 22328779afdc49e44b01d127ae72f314
-  - enabled: 1
-    path: Assets/Scenes/Finished Folders/Level1.unity
+    path: Assets/Scenes/Finished Folders/Level1a.unity
     guid: 83d8e75b13bf38940a623e20adfde992
   - enabled: 1
     path: Assets/Scenes/Finished Folders/Level2.unity

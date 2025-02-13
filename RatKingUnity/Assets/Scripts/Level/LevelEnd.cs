@@ -18,6 +18,8 @@ public class LevelEnd : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if(other.tag == "BlobConnected" || other.tag == "Player")
+        {
             if (GameObject.FindGameObjectsWithTag("BlobDisconnected").Length == 0)
             {
                 Debug.Log("It's a win!");
@@ -27,5 +29,6 @@ public class LevelEnd : MonoBehaviour
             {
                 Debug.Log("It's a loose");
             }
+        }
     }
 }

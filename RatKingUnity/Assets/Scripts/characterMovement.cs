@@ -231,10 +231,13 @@ public class characterMovement : MonoBehaviour
             if (hit.collider != null)
             {
                 var tileType = hit.collider.GetComponent<TileProperties>();
-                if (tileType.TileType == ETileType.Wall)
+                if (tileType != null)
                 {
-                    //Debug.Log("Cannot move to wall");
-                    return true;
+                    if (tileType.TileType == ETileType.Wall)
+                    {
+                        //Debug.Log("Cannot move to wall");
+                        return true;
+                    }
                 }
             }
         }

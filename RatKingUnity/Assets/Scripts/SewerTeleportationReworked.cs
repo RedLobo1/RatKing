@@ -111,6 +111,9 @@ public class SewerTeleportationReworked : MonoBehaviour
         //yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
+            if (EntityTransform.rotation.eulerAngles.y == 180)
+                offset *= -1;
+            
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object
         }

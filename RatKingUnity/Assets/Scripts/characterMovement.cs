@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class characterMovement : MonoBehaviour
 {
@@ -107,7 +108,8 @@ public class characterMovement : MonoBehaviour
                     if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                     {
                         PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
-                        OnConnect?.Invoke(this, pos);
+                        TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
+                        CommandInvoker.ExecuteCommand(command);
                     }
                 }
                 //AttachNeighbours(hit);
@@ -126,7 +128,8 @@ public class characterMovement : MonoBehaviour
                             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                             {
                                 PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f); //average position is the connection point
-                                OnConnect?.Invoke(this, pos);
+                                TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
+                                CommandInvoker.ExecuteCommand(command);
                             }
                         }
                         //AttachNeighbours(hit);
@@ -135,6 +138,11 @@ public class characterMovement : MonoBehaviour
             }
         }
         //CommandInvoker.ExecuteCommand(_command);
+    }
+
+    public void CallVisualEvent(PositionEventArgs pos)
+    {
+        OnConnect?.Invoke(this, pos);
     }
 
     private void CheckForNeighbours(Vector3 movementVector)

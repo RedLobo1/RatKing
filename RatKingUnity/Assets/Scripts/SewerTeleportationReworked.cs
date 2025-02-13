@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SewerTeleportationReworked : MonoBehaviour
@@ -23,7 +21,6 @@ public class SewerTeleportationReworked : MonoBehaviour
     private bool _isTeleporting = false;
 
     private float _teleportDuration = 1.0f;
-    private int index = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -133,7 +130,6 @@ public class SewerTeleportationReworked : MonoBehaviour
 
     public IEnumerator Teleport(Transform EntityTransform)
     {
-        //Debug.Log("Teleporting" + index++);
         var offset = GetOffsetFromParent(EntityTransform); //is zero vector if parent origin overlaps with it
         EntityTransform = GetTopLevelObjectTransform(EntityTransform); //This will get the parent if the entity has one, otherwise it returns itself
 
@@ -144,8 +140,14 @@ public class SewerTeleportationReworked : MonoBehaviour
         //yield return new WaitForSeconds(_teleportDuration);
         if (!IsTeleporterBlocked())
         {
-            if (EntityTransform.rotation.eulerAngles.y == 180)
+            float RotationAngle = Mathf.Round(Vector3.Angle(this.transform.forward, _connectedSewer.transform.forward));
+            if (RotationAngle == 180)
                 offset *= -1;
+            if (RotationAngle == 90)
+                if (this.transform.forward.x > _connectedSewer.transform.forward.x)
+                    offset = Vector3.zero;
+                else
+                    offset = Quaternion.Euler(0, 90, 0) * offset;
 
             EntityTransform.position = _teleportingPosition + offset;
             EntityTransform.rotation = Quaternion.Euler(0, Mathf.RoundToInt(EntityTransform.rotation.eulerAngles.y + _teleportingRotation), 0); //Rotating the object

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class CharacterAnimationController : MonoBehaviour
 {
-    [SerializeField ] private Animator animator;
-    [SerializeField ] private characterMovement character;
+    [SerializeField] private Animator animator;
+    [SerializeField] private characterMovement character;
 
     void Start()
     {
@@ -14,12 +14,12 @@ public class CharacterAnimationController : MonoBehaviour
         }
     }
 
-    private void PlayMoveAnimation()
+    private void PlayMoveAnimation(object sender, GrandChildrenEventArgs e)
     {
         if (animator != null)
         {
             animator.Play("isMoving");
-            Debug.Log("Moved");
+            //Debug.Log("Moved");
         }
     }
     void OnDestroy()

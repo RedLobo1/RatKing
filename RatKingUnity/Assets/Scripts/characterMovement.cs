@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class characterMovement : MonoBehaviour
 {
     private Animator animator;
 
-    public event Action OnMove;
+    public event EventHandler<GrandChildrenEventArgs> OnMove;
     public event EventHandler<PositionEventArgs> OnConnect;
 
     public CompositeCommand _command;
@@ -58,7 +57,7 @@ public class characterMovement : MonoBehaviour
     {
         if (CanIMove(movementVector))
         {
-            OnMove?.Invoke();
+            OnMove?.Invoke(this, GetAllGrandChildren());
             _command = new CompositeCommand();
 
             CheckForNeighbours(movementVector);
@@ -70,6 +69,21 @@ public class characterMovement : MonoBehaviour
             CheckForVisuals(movementVector);
 
         }
+    }
+
+    private GrandChildrenEventArgs GetAllGrandChildren()
+    {
+        List<GameObject> Grandchildren = new List<GameObject>();
+
+        foreach (Transform child in this.transform)
+        {
+            foreach (Transform grandChild in child)
+            {
+                Grandchildren.Add(grandChild.gameObject);
+            }
+        }
+        //Debug.Log(Grandchildren.Count);
+        return new GrandChildrenEventArgs(Grandchildren);
     }
 
     public bool CanIMove(Vector3 movementVector)
@@ -110,7 +124,7 @@ public class characterMovement : MonoBehaviour
                 {
                     if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                     {
-                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f); //average position is the connection point
+                        PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + this.transform.position) / 2f, hit.collider.transform.parent.gameObject); //average position is the connection point
                         TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
                         CommandInvoker.ExecuteCommand(command);
                     }
@@ -130,7 +144,7 @@ public class characterMovement : MonoBehaviour
                         {
                             if (blob.CompareTag("BlobDisconnected")) //Can only attach to disconnected blobs (blobs are set as connected when parented)
                             {
-                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f); //average position is the connection point
+                                PositionEventArgs pos = new PositionEventArgs((hit.collider.gameObject.transform.position + grandChild.transform.position) / 2f, hit.collider.transform.parent.gameObject); //average position is the connection point
                                 TriggerVisualsCommand command = new TriggerVisualsCommand(this, pos);
                                 CommandInvoker.ExecuteCommand(command);
                             }
